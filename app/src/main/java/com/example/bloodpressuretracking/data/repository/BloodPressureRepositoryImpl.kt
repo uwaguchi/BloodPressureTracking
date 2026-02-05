@@ -52,6 +52,7 @@ class BloodPressureRepositoryImpl @Inject constructor(
         return rawData.lines()
             .filter { it.isNotBlank() }
             .mapNotNull { line -> parseLine(line) }
+            .sortedByDescending { it.recordedAt }
     }
 
     /**
