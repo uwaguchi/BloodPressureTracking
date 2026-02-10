@@ -13,7 +13,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -89,25 +88,6 @@ fun RecordListScreen(
                 .padding(paddingValues)
                 .padding(16.dp)
         ) {
-            // Fetch button
-            Button(
-                onClick = { viewModel.fetchRecords() },
-                enabled = !uiState.isLoading,
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                if (uiState.isLoading) {
-                    CircularProgressIndicator(
-                        modifier = Modifier.height(24.dp),
-                        color = MaterialTheme.colorScheme.onPrimary,
-                        strokeWidth = 2.dp
-                    )
-                } else {
-                    Text("データを取得")
-                }
-            }
-
-            Spacer(modifier = Modifier.height(16.dp))
-
             // Content area
             when {
                 uiState.isLoading -> {
@@ -124,7 +104,7 @@ fun RecordListScreen(
                         contentAlignment = Alignment.Center
                     ) {
                         Text(
-                            text = "データがありません\n「データを取得」ボタンを押してください",
+                            text = "データがありません",
                             style = MaterialTheme.typography.bodyLarge,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )

@@ -23,6 +23,10 @@ class RecordListViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(RecordListUiState())
     val uiState: StateFlow<RecordListUiState> = _uiState.asStateFlow()
 
+    init {
+        fetchRecords()
+    }
+
     /**
      * Fetch blood pressure records from repository.
      */
