@@ -42,16 +42,48 @@ class AmplifyAuthWrapperImpl @Inject constructor() : AmplifyAuthWrapper {
                     }
                 },
                 { error ->
-                    val message = when {
-                        error.message?.contains("NotAuthorizedException") == true ->
-                            "ユーザー名またはパスワードが正しくありません"
-                        error.message?.contains("UserNotFoundException") == true ->
-                            "ユーザーが見つかりません"
-                        error.message?.contains("network") == true ->
-                            "ネットワークに接続できません"
-                        else -> error.message ?: "ログインに失敗しました"
+                    val isAlreadySignedIn = error.message?.contains("There is already a user signed in") == true
+                        || error.cause?.javaClass?.simpleName?.contains("UserAlreadySignedIn") == true
+
+                    if (isAlreadySignedIn) {
+                        // 既存セッションをクリアしてリトライ
+                        val options = AuthSignOutOptions.builder().globalSignOut(false).build()
+                        Amplify.Auth.signOut(options) {
+                            Amplify.Auth.signIn(
+                                username, password,
+                                { retryResult ->
+                                    if (retryResult.isSignedIn) {
+                                        continuation.resume(SignInResult.Success)
+                                    } else {
+                                        continuation.resume(SignInResult.Error("追加の認証ステップが必要です"))
+                                    }
+                                },
+                                { retryError ->
+                                    val message = when {
+                                        retryError.message?.contains("NotAuthorizedException") == true ->
+                                            "ユーザー名またはパスワードが正しくありません"
+                                        retryError.message?.contains("UserNotFoundException") == true ->
+                                            "ユーザーが見つかりません"
+                                        retryError.message?.contains("network") == true ->
+                                            "ネットワークに接続できません"
+                                        else -> retryError.message ?: "ログインに失敗しました"
+                                    }
+                                    continuation.resume(SignInResult.Error(message))
+                                }
+                            )
+                        }
+                    } else {
+                        val message = when {
+                            error.message?.contains("NotAuthorizedException") == true ->
+                                "ユーザー名またはパスワードが正しくありません"
+                            error.message?.contains("UserNotFoundException") == true ->
+                                "ユーザーが見つかりません"
+                            error.message?.contains("network") == true ->
+                                "ネットワークに接続できません"
+                            else -> error.message ?: "ログインに失敗しました"
+                        }
+                        continuation.resume(SignInResult.Error(message))
                     }
-                    continuation.resume(SignInResult.Error(message))
                 }
             )
         }
