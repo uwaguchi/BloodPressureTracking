@@ -1,0 +1,22 @@
+{
+  "feature_name": "camera-image-input",
+  "language": "ja",
+  "project_description": "カメラで撮影した画像から入力値を取得",
+  "phase": "implementation-complete",
+  "created_at": "2026-03-04T00:00:00Z",
+  "updated_at": "2026-03-04T00:00:00Z",
+  "approvals": {
+    "requirements": {
+      "generated": true,
+      "approved": true
+    },
+    "design": {
+      "generated": true,
+      "approved": true
+    },
+    "tasks": {
+      "generated": true,
+      "approved": true
+    }
+  }
+}
