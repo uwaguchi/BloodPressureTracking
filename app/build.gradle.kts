@@ -71,6 +71,7 @@ dependencies {
     implementation(libs.androidx.compose.ui.graphics)
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.compose.material.icons.extended)
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
 
@@ -82,6 +83,9 @@ dependencies {
     // OkHttp (HTTP Client)
     implementation(libs.okhttp)
     implementation(libs.okhttp.logging)
+
+    // ML Kit Text Recognition
+    implementation(libs.mlkit.text.recognition)
 
     // AWS Amplify Auth
     implementation(libs.amplify.core)
